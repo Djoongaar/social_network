@@ -6,8 +6,8 @@ from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from socialapp.models import Post
-from socialapp.serializer import PostSerializer, PostDetailSerializer
+from socialapp.models import Post, Like
+from socialapp.serializer import PostSerializer, PostDetailSerializer, LikeSerializer
 
 
 class PostListCreateView(APIView):
@@ -36,6 +36,7 @@ class PostListCreateView(APIView):
 
 class PostDetailView(APIView):
     """ Retrieve, update or delete object """
+
     def get_object(self, pk):
         try:
             return Post.objects.get(pk=pk)
@@ -48,11 +49,31 @@ class PostDetailView(APIView):
         return Response(serializer.data)
 
 
-class LikeListCreateView(APIView):
-    """ Get list or statistics of objects or Create new one """
-    pass
-
-
-class LikeDetailView(APIView):
+class LikeCreateView(APIView):
     """ Like / Unlike """
-    pass
+
+    def get_object(self, pk, request):
+        try:
+            # Getting object by filtering Like obj by post_id, then get unique by user.id
+            post = Like.objects.filter(post_id=pk).get(user_id=request.user.id)
+            return post
+        except Like.DoesNotExist:
+            return None
+
+    def get(self, request, pk, format=None):
+        like_obj = self.get_object(pk, request)
+        # if like object already exist --> delete obj
+        if like_obj:
+            like_obj.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            #  otherwise we create the new one
+            data = {
+                'user': request.user.id,
+                'post': pk
+            }
+            serializer = LikeSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
