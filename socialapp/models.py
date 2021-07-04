@@ -10,6 +10,7 @@ class Post(models.Model):
     text = models.TextField(verbose_name='Text')
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    @property
     def count_likes(self):
         """ Return number of likes for specific Post object """
         return self.likes.select_related().count()

@@ -15,8 +15,9 @@ Including another URLconf
 """
 from django.urls import path
 
-from socialapp.views import PostListCreateView
+from socialapp.views import PostListCreateView, PostDetailView
 
 urlpatterns = [
-    path('post_list/', PostListCreateView.as_view())
+    path('post_list/', PostListCreateView.as_view()),
+    path('post_details/<int:pk>/', PostDetailView.as_view())
 ]

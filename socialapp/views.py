@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render
 
 # Create your views here.
@@ -6,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from socialapp.models import Post
-from socialapp.serializer import PostSerializer
+from socialapp.serializer import PostSerializer, PostDetailSerializer
 
 
 class PostListCreateView(APIView):
@@ -34,7 +35,16 @@ class PostListCreateView(APIView):
 
 class PostDetailView(APIView):
     """ Retrieve, update or delete object """
-    pass
+    def get_object(self, pk):
+        try:
+            return Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        post = self.get_object(pk)
+        serializer = PostDetailSerializer(post)
+        return Response(serializer.data)
 
 
 class LikeListCreateView(APIView):

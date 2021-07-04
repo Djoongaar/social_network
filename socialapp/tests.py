@@ -1,13 +1,18 @@
 from django.test import TestCase
 
 # Create your tests here.
+
 # POSTMAN TESTS
-#  CASE 1. USER IS AUTHENTICATED - done
-#  CASE 2. CREATE USER - done
-#  CASE 3. USER GET TOKEN - done
-#  CASE 4. USER LOGIN - done
+
+# ================ VIEWS ================
+
+#  CASE 1. USER IS AUTHENTICATED --> tested
+#  CASE 2. CREATE USER --> tested
+#  CASE 3. USER GET TOKEN --> tested
+#  CASE 4. USER LOGIN --> tested
 
 
-#  MODELS
-#  CASE 1. CRUD POST, Create - done
+# ================ VIEWS ================
+
+#  CASE 1. CRUD POST --> List, Create, Details --> tested
 #  CASE 2. CRUD LIKE
