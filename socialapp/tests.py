@@ -9,5 +9,5 @@ from django.test import TestCase
 
 
 #  MODELS
-#  CASE 1. CRUD POST
+#  CASE 1. CRUD POST, Create - done
 #  CASE 2. CRUD LIKE
