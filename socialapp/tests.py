@@ -6,3 +6,8 @@ from django.test import TestCase
 #  CASE 2. CREATE USER - done
 #  CASE 3. USER GET TOKEN - done
 #  CASE 4. USER LOGIN - done
+
+
+#  MODELS
+#  CASE 1. CRUD POST
+#  CASE 2. CRUD LIKE
