@@ -1,4 +1,5 @@
 import django_filters
+from django.db.models import Count
 from django.http import Http404
 
 from django_filters import rest_framework as filters
@@ -90,7 +91,8 @@ class LikeFilterSet(filters.FilterSet):
 
 
 class LikeList(generics.ListAPIView):
-    queryset = Like.objects.all()
+    queryset = Like.objects.all().values('created').annotate(total=Count('created'))
     serializer_class = LikeAnalyticSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = LikeFilterSet
+

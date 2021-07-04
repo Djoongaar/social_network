@@ -1,3 +1,5 @@
+from abc import ABC
+
 from rest_framework import serializers
 from socialapp.models import Post, Like
 
@@ -23,8 +25,6 @@ class LikeSerializer(serializers.ModelSerializer):
         fields = ['user', 'post']
 
 
-class LikeAnalyticSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Like
-        fields = ['user', 'post', 'created']
+class LikeAnalyticSerializer(serializers.Serializer):
+    total = serializers.IntegerField()
+    created = serializers.DateField()
