@@ -2,7 +2,7 @@ from django.http import Http404
 from django.shortcuts import render
 
 # Create your views here.
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -12,6 +12,7 @@ from socialapp.serializer import PostSerializer, PostDetailSerializer
 
 class PostListCreateView(APIView):
     """ Get list of objects or Create new one """
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request, format=None):
         # Get all post objects, serialize them and return to user
@@ -53,5 +54,5 @@ class LikeListCreateView(APIView):
 
 
 class LikeDetailView(APIView):
-    """ Retrieve, update or delete object """
+    """ Like / Unlike """
     pass
