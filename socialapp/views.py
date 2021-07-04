@@ -55,8 +55,8 @@ class LikeCreateDestroyView(APIView):
     """ Like / Unlike """
 
     def get_object(self, pk, request):
+        """ Getting object by filtering Like obj by post_id, then get unique by user.id """
         try:
-            # Getting object by filtering Like obj by post_id, then get unique by user.id
             post = Like.objects.filter(post_id=pk).get(user_id=request.user.id)
             return post
         except Like.DoesNotExist:
@@ -64,12 +64,13 @@ class LikeCreateDestroyView(APIView):
 
     def get(self, request, pk, format=None):
         like_obj = self.get_object(pk, request)
-        # if like object already exist --> delete obj
         if like_obj:
+            # if Like object already exist --> delete obj
             like_obj.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
+
         else:
-            #  otherwise we create the new one
+            #  Otherwise Create the New One
             data = {
                 'user': request.user.id,
                 'post': pk
@@ -82,6 +83,7 @@ class LikeCreateDestroyView(APIView):
 
 
 class LikeFilterSet(filters.FilterSet):
+    """ Create specific filters """
     date_from = filters.DateFilter(field_name='created', lookup_expr='gte')
     date_to = filters.DateFilter(field_name='created', lookup_expr='lte')
 
@@ -91,6 +93,7 @@ class LikeFilterSet(filters.FilterSet):
 
 
 class LikeList(generics.ListAPIView):
+    """ Get and aggregate queryset and filter it by FilterSet """
     queryset = Like.objects.all().values('created').annotate(total=Count('created'))
     serializer_class = LikeAnalyticSerializer
     filter_backends = (filters.DjangoFilterBackend,)

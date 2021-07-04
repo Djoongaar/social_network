@@ -17,10 +17,11 @@ class Post(models.Model):
 
 
 class Like(models.Model):
+    """ This model extend Post.likes field to save additional field --> created """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, related_name='preferences', on_delete=models.CASCADE)
     created = models.DateField(auto_now_add=True)
 
     class Meta:
-        """ Surrogate Primary Key: Restriction from creating duplicate likes """
+        """ Surrogate Primary Key --> to prevent creating duplicate likes """
         unique_together = (('user', 'post'),)
