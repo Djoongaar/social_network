@@ -40,7 +40,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'djoser',
-    'socialapp'
+    'socialapp',
+    'django_filters'
 ]
 
 

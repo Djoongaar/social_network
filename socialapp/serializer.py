@@ -21,3 +21,10 @@ class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
         fields = ['user', 'post']
+
+
+class LikeAnalyticSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Like
+        fields = ['user', 'post', 'created']

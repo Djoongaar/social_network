@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.urls import path
 
-from socialapp.views import PostListCreateView, PostDetailView, LikeCreateView
+from socialapp.views import PostListCreateView, PostDetailView, LikeCreateDestroyView, LikeList
 
 urlpatterns = [
     path('post_list/', PostListCreateView.as_view()),
     path('post_details/<int:pk>/', PostDetailView.as_view()),
-    path('like_create/<int:pk>/', LikeCreateView.as_view())
+    path('like_create/<int:pk>/', LikeCreateDestroyView.as_view()),
+    path('api/analytics/', LikeList.as_view())
 ]

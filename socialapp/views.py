@@ -1,13 +1,14 @@
+import django_filters
 from django.http import Http404
-from django.shortcuts import render
 
-# Create your views here.
-from rest_framework import status, permissions
+from django_filters import rest_framework as filters
+
+from rest_framework import status, permissions, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from socialapp.models import Post, Like
-from socialapp.serializer import PostSerializer, PostDetailSerializer, LikeSerializer
+from socialapp.serializer import PostSerializer, PostDetailSerializer, LikeSerializer, LikeAnalyticSerializer
 
 
 class PostListCreateView(APIView):
@@ -49,7 +50,7 @@ class PostDetailView(APIView):
         return Response(serializer.data)
 
 
-class LikeCreateView(APIView):
+class LikeCreateDestroyView(APIView):
     """ Like / Unlike """
 
     def get_object(self, pk, request):
@@ -77,3 +78,19 @@ class LikeCreateView(APIView):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LikeFilterSet(filters.FilterSet):
+    date_from = filters.DateFilter(field_name='created', lookup_expr='gte')
+    date_to = filters.DateFilter(field_name='created', lookup_expr='lte')
+
+    class Meta:
+        model = Like
+        fields = ('date_from', 'date_to')
+
+
+class LikeList(generics.ListAPIView):
+    queryset = Like.objects.all()
+    serializer_class = LikeAnalyticSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = LikeFilterSet
